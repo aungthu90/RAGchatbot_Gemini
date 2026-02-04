@@ -76,17 +76,27 @@ if os.path.exists(DATA_PATH) and any(f.endswith('.pdf') for f in os.listdir(DATA
     vector_store = initialize_vector_store()
     retriever = vector_store.as_retriever(search_type="mmr", search_kwargs={"k": 5})
 
-    # Initialize LLM (Gemini 1.5 Flash)
+    # Initialize LLM (Gemini 2.5 Flash)
     llm = ChatGoogleGenerativeAI(
-        model="gemini-1.5-flash",
+        model="gemini-2.5-flash",
         temperature=0.3,
+        max_output_tokens=1000,
         google_api_key=GOOGLE_API_KEY
     )
 
     # Define Prompt Template
     prompt = ChatPromptTemplate.from_messages([
-        ("system", "You are a professional assistant. Use the provided context to answer the user's question accurately.\n\nContext:\n{context}"),
-        ("human", "{question}")
+       ("system",
+             "You are a helpful assistant answering questions about a PDF document.\n\n"
+             "Guidelines:\n"
+             "1. Provide complete, well-explained answers using the context below.\n"
+             "2. Include relevant details, numbers, and explanations.\n"
+             "3. Include related info from the context if relevant.\n"
+             "4. Only use information from the provided context.\n"
+             "5. Summarize long info, use bullets if needed.\n"
+             "6. If info is missing, say so politely.\n\n"
+             "Context:\n{context}"),
+            ("human", "{question}")
     ])
 
     # Build the RAG Chain
@@ -116,3 +126,4 @@ if os.path.exists(DATA_PATH) and any(f.endswith('.pdf') for f in os.listdir(DATA
                     logger.exception("Chain invocation failed")
 else:
     st.info("Please add PDF files to your 'data/' folder on GitHub to start chatting.")
+
