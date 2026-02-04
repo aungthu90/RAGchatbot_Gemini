@@ -20,7 +20,7 @@ GOOGLE_API_KEY = st.secrets["GEMINI_API_KEY"]
 DATA_PATH = "data/"
 
 st.set_page_config(page_title="RAG Chatbot", layout="wide")
-st.header("🤖 Knowledge Base Chatbot (Gemini 1.5 Flash)")
+st.header("🤖 Knowledge Base Chatbot (Geminitest_Aung)")
 
 # ----------------------------
 # 2. SIDEBAR - FILE STATUS
@@ -126,4 +126,5 @@ if os.path.exists(DATA_PATH) and any(f.endswith('.pdf') for f in os.listdir(DATA
                     logger.exception("Chain invocation failed")
 else:
     st.info("Please add PDF files to your 'data/' folder on GitHub to start chatting.")
+
 
